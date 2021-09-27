@@ -1,5 +1,6 @@
 import { LightningElement , track} from 'lwc';
 import getAccounts from '@salesforce/apex/AccountHelper.getAccounts';
+import { NavigationMixin } from 'lightning/navigation';
 
 const columns = [
     { label: 'Id', fieldName: 'Id', type: 'text' },
@@ -12,7 +13,7 @@ const columns = [
             label: 'View Details',
             variant: 'brand',
             class: 'scaled-down',
-            name: 'update_button'
+            name: 'update'
         }
     },
     {
@@ -23,7 +24,7 @@ const columns = [
             label: 'Destructive',
             variant: 'destructive',
             class: 'scaled-down',
-            name: 'delete_button'
+            name: 'delete'
         }
     }
 ];
@@ -46,12 +47,28 @@ export default class AccountForm extends LightningElement {
     }
 
     getSelectedName(event) {
+        const row = event.detail.row;
         console.log(' action --->' + event.detail.action.name);
-        // switch (action.name) {
-        //     case 'show_details':
-        //         alert('Showing Details: ' + JSON.stringify(row));
-        //         break;
-        // }
+        console.log((row.Id));
+
+        if (event.detail.action.name == 'update'){
+            this.navigateToCustomRecordPage(row.Id);
+        } else {
+            //to do
+            console.log('Delete button');
+        }
+    }
+
+    navigateToCustomRecordPage(id){
+        console.log('hhh');
+        this[NavigationMixin.Navigate]({
+            type: 'standard_recordPage',
+            attributes: {
+                recordId: id,
+                objectApiName: 'Account',
+                actionName: 'edit'
+            }
+        })
     }
 
     handleSelect(){
