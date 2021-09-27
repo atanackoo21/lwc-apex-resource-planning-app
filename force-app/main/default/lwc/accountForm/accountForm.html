@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Datatable Example" icon-name="custom:custom63">
+        <div class="slds-m-around_medium">
+                <lightning-datatable
+                    key-field="id"
+                    data={acc}
+                    columns={columns}
+                    onrowaction={getSelectedName}>
+                </lightning-datatable>
+                <lightning-button
+                    label="Select"
+                    onclick={handleSelect}>
+                </lightning-button>
+        </div>
+    </lightning-card>
+</template>

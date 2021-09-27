@@ -1,0 +1,32 @@
+<template>
+    <div class="slds-context-bar">
+        <div class="slds-context-bar__primary">
+            <nav class="slds-context-bar__secondary" role="navigation">
+                <ul class="slds-grid">
+                    <li class="slds-context-bar__item slds-is-active">
+                        <a href="#" class="slds-context-bar__label-action" title="Home">
+                            <span class="slds-assistive-text">Current Page:</span>
+                            <span class="slds-truncate" title="Home">Home</span>
+                        </a>
+                    </li>
+                    <li class="slds-context-bar__item">
+                        <a onclick={navigateToAccountForm} class="slds-context-bar__label-action" title="Menu Item">
+                            <span class="slds-truncate" title="Menu Item8">Dobavljaci</span>
+                        </a>
+                    </li>
+                    <li class="slds-context-bar__item">
+                        <a href="#" class="slds-context-bar__label-action" title="Menu Item">
+                            <span class="slds-truncate" title="Menu Item">Menu 2991</span>
+                        </a>
+                    </li>
+                    <li class="slds-context-bar__item">
+                        <a href="#" class="slds-context-bar__label-action" title="Menu Item">
+                            <span class="slds-truncate" title="Menu Item">{accountForm}</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div> 
+    <c-account-form if:true={accountForm}></c-account-form>
+</template>
