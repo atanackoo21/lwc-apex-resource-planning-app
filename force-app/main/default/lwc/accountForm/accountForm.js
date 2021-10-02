@@ -1,10 +1,16 @@
-import { LightningElement , track} from 'lwc';
+import { api, LightningElement , track, wire} from 'lwc';
 import getAccounts from '@salesforce/apex/AccountHelper.getAccounts';
+import updateAccount from '@salesforce/apex/AccountHelper.updateAccount';
+
 import { NavigationMixin } from 'lightning/navigation';
+import { refreshApex } from '@salesforce/apex';
 
 const columns = [
-    { label: 'Id', fieldName: 'Id', type: 'text' },
     { label: 'Name', fieldName: 'Name',  type: 'text'},
+    { label: 'Phone', fieldName: 'Phone', type: 'text' },
+    { label: 'BillingStreet', fieldName: 'BillingStreet', type: 'text' },
+    { label: 'BillingCity', fieldName: 'BillingCity', type: 'text' },
+    { label: 'Email', fieldName: 'Email__c', type: 'text' },
     {
         label:"",
         type: "button",
@@ -30,45 +36,80 @@ const columns = [
 ];
 
 //'../../classes/AccountHelper.getAccounts'
-export default class AccountForm extends LightningElement {
-    @track acc={Id: "4", Name: "h"};
-    columns = columns;
+export default class AccountForm extends NavigationMixin(LightningElement) {
+    @track isModalOpen;
+    @track isModalDeleteOpen;
+    @track clickedAccount={
+        Name: "",
+        Phone: "",
+        Email__c: "",
+        BillingCity: "",
+        BillingStreet: ""
+    };
     
-    connectedCallback(){
-        //getAccounts();
-        getAccounts()
-        .then(result =>{
-            this.acc=result;
-            console.log(this.acc[0].Id + " " + this.acc[0].Name);
-        })
-        .catch(error => {
-            console.log('Eror');
-        });
+    closeModal(){
+        this.isModalOpen = false;
+        this.isModalDeleteOpen = false;
     }
+    @track acc={Id: "", Name: ""};
+    columns = columns;
+
+     // non-reactive variables
+     @track refreshTable;
+
+     // retrieving the data using wire service
+     @wire(getAccounts, {})
+     relations(result) {
+         this.refreshTable = result;
+         if (result.data) {
+             this.acc = result.data;
+             //this.emptyList = true;
+         }
+         refreshApex(this.refreshTable);
+     }
 
     getSelectedName(event) {
         const row = event.detail.row;
-        console.log(' action --->' + event.detail.action.name);
-        console.log((row.Id));
-
+        this.clickedAccount = row;
         if (event.detail.action.name == 'update'){
-            this.navigateToCustomRecordPage(row.Id);
+            this.isModalOpen = true;
         } else {
             //to do
             console.log('Delete button');
+            this.isModalDeleteOpen = true;
         }
+        //console.log('Log rfrsh');
+        //return refreshApex(this.refreshTable);
     }
 
-    navigateToCustomRecordPage(id){
-        console.log('hhh');
-        this[NavigationMixin.Navigate]({
-            type: 'standard_recordPage',
-            attributes: {
-                recordId: id,
-                objectApiName: 'Account',
-                actionName: 'edit'
-            }
+    submitDetails(){
+        updateAccount({ acc : this.clickedAccount})
+        .then(result =>{
+            console.log(result);
+            refreshApex(this.refreshTable);
         })
+        .catch(error => {
+            console.error(error);
+        });
+        this.isModalOpen = false;
+    }
+
+    handleChange(event){
+        console.log('13');
+
+        var targetName = event.target.name;
+
+        if(targetName == 'Name'){
+            this.clickedAccount = { ...this.clickedAccount, Name: event.target.value}
+        } else if(targetName == 'Phone'){
+            this.clickedAccount = { ...this.clickedAccount, Phone: event.target.value }
+        } else if(targetName == 'Email'){
+            this.clickedAccount = { ...this.clickedAccount, Email__c: event.target.value }
+        } else if(event.target.name == 'BillingStreet'){
+            this.clickedAccount = { ...this.clickedAccount, BillingStreet: event.target.value } 
+        } else if(event.target.name == 'BillingCity'){
+            this.clickedAccount = { ...this.clickedAccount, BillingCity: event.target.value } 
+        }
     }
 
     handleSelect(){
