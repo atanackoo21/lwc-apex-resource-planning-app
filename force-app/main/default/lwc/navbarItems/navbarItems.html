@@ -3,20 +3,23 @@
         <div class="slds-context-bar__primary">
             <nav class="slds-context-bar__secondary" role="navigation">
                 <ul class="slds-grid">
-                    <li class="slds-context-bar__item slds-is-active">
+                    <li class="slds-context-bar__item">
                         <a href="#" class="slds-context-bar__label-action" title="Home">
-                            <span class="slds-assistive-text">Current Page:</span>
                             <span class="slds-truncate" title="Home">Home</span>
                         </a>
                     </li>
+                    <!-- <template if:true={accountForm}>
+                        <li class="slds-context-bar__item">
+                    </template> -->
+                    <!-- <li class="slds-context-bar__item slds-is-active"> -->
                     <li class="slds-context-bar__item">
                         <a onclick={navigateToAccountForm} class="slds-context-bar__label-action" title="Menu Item">
-                            <span class="slds-truncate" title="Menu Item8">Dobavljaci</span>
+                            <span class="slds-truncate" title="Menu Item8">Distributers</span>
                         </a>
                     </li>
                     <li class="slds-context-bar__item">
-                        <a href="#" class="slds-context-bar__label-action" title="Menu Item">
-                            <span class="slds-truncate" title="Menu Item">Menu 2991</span>
+                        <a onclick={navigateToUserList} class="slds-context-bar__label-action" title="Menu Item">
+                            <span class="slds-truncate" title="Menu Item">Users</span>
                         </a>
                     </li>
                     <li class="slds-context-bar__item">
@@ -29,4 +32,5 @@
         </div>
     </div> 
     <c-account-form if:true={accountForm}></c-account-form>
+    <c-user-list if:true={userList}></c-user-list>
 </template>

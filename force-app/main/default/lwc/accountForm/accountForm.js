@@ -1,6 +1,5 @@
-import { api, LightningElement , track, wire} from 'lwc';
+import { LightningElement , track, wire} from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import { NavigationMixin } from 'lightning/navigation';
 import { refreshApex } from '@salesforce/apex';
 
 import getAccounts from '@salesforce/apex/AccountHelper.getAccounts';
@@ -40,7 +39,7 @@ const columns = [
 ];
 
 //'../../classes/AccountHelper.getAccounts'
-export default class AccountForm extends NavigationMixin(LightningElement) {
+export default class AccountForm extends (LightningElement) {
     @track isModalOpen;
     @track isModalDeleteOpen;
     @track isNewModalOpen;
