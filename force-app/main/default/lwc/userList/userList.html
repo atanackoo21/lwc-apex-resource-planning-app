@@ -3,7 +3,7 @@
         <lightning-button
             slot="actions"
             label="New"
-            onclick={handleNew}
+            onclick={openCreateModal}
             >
         </lightning-button>
         <div class="slds-m-around_medium">
@@ -15,9 +15,59 @@
             </lightning-datatable>
         </div>
     </lightning-card>
+    <template if:false={isLoad}>
+        <div class="exampleHolder">
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </div>
+    </template>
 
     <!-- <button class="slds-button slds-button_neutral" onclick={openEditModal} title="Edit">Edt</button> -->
-
+    <template if:true={isCreateModalOpen}>
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Create User</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning-record-edit-form object-api-name="Contact" onsuccess={handleSuccess}>
+                        <lightning-messages>
+                        </lightning-messages>
+                        <lightning-input-field field-name="FirstName" onchange={handleFieldChange} required>
+                        </lightning-input-field>
+                        <lightning-input-field field-name="LastName" onchange={handleFieldChange} required>
+                        </lightning-input-field>
+                        <lightning-input-field field-name="Email" onchange={handleFieldChange} required>
+                        </lightning-input-field>
+                        <div>
+                            <lightning-button 
+                                style="margin-left: 11.5rem;"
+                                class="slds-m-top_small"
+                                type="cancel"
+                                variant="neutral"
+                                label="Cancel"
+                                onclick={closeModal}>
+                            </lightning-button>
+                            <lightning-button
+                                style="margin-left: 1rem;"
+                                class="slds-m-top_small"
+                                type="submit"
+                                variant="brand"
+                                label="Create">
+                            </lightning-button>
+                        </div>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
     <template if:true={isEditModalOpen}>
         <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
             <div class="slds-modal__container">
@@ -29,9 +79,9 @@
                             size="small" ></lightning-icon>
                         <span class="slds-assistive-text">Close</span>
                     </button>
-                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Update User</h2>
+                    <h2 id="modal-heading-03" class="slds-text-heading_medium slds-hyphenate">Update User</h2>
                 </header>
-                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-3">
                     <lightning-record-edit-form object-api-name="Contact" record-id={clickedContact.Id} onsuccess={handleSuccess}>
                         <lightning-messages>
                         </lightning-messages>
@@ -61,6 +111,34 @@
                         </div>
                     </lightning-record-edit-form>
                 </div>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <template if:true={isDeleteModalOpen}>
+        <!-- Modal/Popup Box LWC starts here -->
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <!-- Modal/Popup Box LWC header here -->
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close"
+                            alternative-text="close"
+                            variant="inverse"
+                            size="small" ></lightning-icon>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-02" class="slds-text-heading_medium slds-hyphenate">Delete</h2>
+                </header>
+                <!-- Modal/Popup Box LWC body starts here -->
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-2">
+                    Are you sure to delete {clickedContact.Name}?
+                </div>
+                <!-- Modal/Popup Box LWC footer starts here -->
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_destructive" onclick={submitDelete} title="Delete">Delete</button>
+                </footer>
             </div>
         </section>
         <div class="slds-backdrop slds-backdrop_open"></div>

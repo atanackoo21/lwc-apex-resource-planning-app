@@ -30,7 +30,7 @@ const columns = [
         type: "button",
         fixedWidth: 150,
         typeAttributes: {
-            label: 'Destructive',
+            label: 'Delete',
             variant: 'destructive',
             class: 'scaled-down',
             name: 'delete'
@@ -40,6 +40,7 @@ const columns = [
 
 //'../../classes/AccountHelper.getAccounts'
 export default class AccountForm extends (LightningElement) {
+    @track isLoad=false;
     @track isModalOpen;
     @track isModalDeleteOpen;
     @track isNewModalOpen;
@@ -71,6 +72,7 @@ export default class AccountForm extends (LightningElement) {
              //this.emptyList = true;
          }
          refreshApex(this.refreshTable);
+         this.isLoad = true;
      }
 
     getSelectedName(event) {
@@ -110,9 +112,9 @@ export default class AccountForm extends (LightningElement) {
             refreshApex(this.refreshTable);
             this.dispatchEvent(
                 new ShowToastEvent({
-                    title: result == 'Successfully deleting' ? 'Success' : 'Error deleting record',
-                    message: result == 'Successfully deleting' ? 'Record deleted' : result,
-                    variant: result == 'Successfully deleting' ? 'success' : 'Error',
+                    title: result == 'Successful delete' ? 'Success' : 'Error deleting record',
+                    message: result == 'Successful delete' ? 'Record deleted' : result,
+                    variant: result == 'Successful delete' ? 'Success' : 'Error',
                     mode: 'pester'
                 })
             );

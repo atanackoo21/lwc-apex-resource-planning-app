@@ -8,24 +8,13 @@ public with sharing class UserHelper {
     }
 
     @AuraEnabled(cacheable=false)
-    public static String deleteAccount(Account acc) {
+    public static String deleteContact(Contact contact) {
         try {
-            Database.DeleteResult deletedAccount = Database.delete(acc, true);
+            Database.DeleteResult deletedContact = Database.delete(contact, true);
         } catch(Exception e) {
             System.debug('Exception: ' + e);
             return e.getMessage();
         } 
-        return 'Successfully deleting';
+        return 'Successful delete';
     }
-    @AuraEnabled(cacheable=false)
-    public static String insertAccount(Account acc) {
-        try {
-            insert acc;
-        } catch(Exception e) {
-            System.debug('Exception: ' + e);
-            return e.getMessage();
-        } 
-        return 'Successfully adding';
-    }
-
 }
